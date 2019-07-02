@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <style>
+            textarea {
+            resize: none;
+            display: table-cell;
+            }
+        </style>
+        <title>Дистанционная система проверки задач</title>
+        <link href="../static/bootstrap.css" rel="stylesheet">
+        <link href="../static/jumbotron-narrow.css" rel="stylesheet">
+        <script src="../static/js/jquery-3.3.1.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <nav>
+                    <ul class="nav nav-pills pull-right">
+                        <li role="presentation" class="active"><a href="/usersadmin">Пользователи</a>
+                        </li>
+                        <li role="presentation"><a href="/logout">Выйти</a>
+                        </li>
+                    </ul>
+                </nav>
+                <h3 class="text-muted">Дистанционная система проверки задач</h3>
+            </div>
+            <section>
+                <div class="jumbotron">
+                    <form class="form-horizontal" method="post" action="/updateUser">
+                        <fieldset>
+                            <!-- Form Name -->
+                            <h2>Редактирование данных пользователя</h2>
+                            <div class="form-signin">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <p class="col-md-2 control-label" style="display: table-cell;">Имя:</p>
+                                        <div class="col-md-4">
+                                            <textarea type="text" class="form-control" id="Name" name ="updateName"></textarea>	
+                                        </div>
+                                        <p class="col-md-2 control-label" style="display: table-cell; text-align: left;">Фамилия:</p>
+                                        <div class="col-md-4">
+                                            <textarea type="text" class="form-control" id="SecName" name ="updateSecName"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <p class="col-md-2 control-label" style="display: table-cell;">Группа:</p>
+                                        <div class="col-md-4">
+                                            <textarea type="text" class="form-control" id="GroupName" name ="updateGroup"></textarea>
+                                        </div>
+                                        <p class="col-md-2 control-label" style="display: table-cell; text-align: left;">Email:</label>
+                                        <div class="col-md-4">
+                                            <textarea type="text" class="form-control" id="editEmail" name ="updateEmail"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <p class="col-md-2 control-label" style="display: table-cell;">Пароль:</p>
+                                        <div class="col-md-4">
+                                            <textarea type="text" class="form-control" id="password" name ="updatePassword"></textarea>
+                                        </div>
+                                        <p class="col-md-4 control-label" style="display: table-cell; text-align: left;">Администратор:</p>
+                                        <div class="col-md-2 control-label" style="display: table-cell;padding-top: 12px;">
+                                            <input type="checkbox" id="scales" name="updateAdmin"></input> 
+                                            <label for="scales">Да/Нет</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <textarea style="display: none"  id="txtId" name = "JustId"> </textarea>
+                                <script>
+                                    var user = JSON.parse('{{ user | tojson | safe}}');
+                                    
+                                    document.getElementById('Name').innerHTML = user.Name
+                                    document.getElementById('SecName').innerHTML = user.SecName
+                                    document.getElementById('GroupName').innerHTML = user.Group
+                                    document.getElementById('editEmail').innerHTML = user.Email
+                                    document.getElementById('password').innerHTML = user.Password
+                                    document.getElementById('txtId').innerHTML = user.Id
+                                    if (user.Admin == "1") {
+                                    	$('#scales').attr('checked', 'checked');
+                                    }
+                                    document.getElementById('scales').innerHTML = user.Admin
+                                </script>
+                                <div class="col-xs">
+                                    <label class="col-md-4 control-label" for="singlebutton"></label>
+                                    <input id="btnUpdate" name="singlebutton" class="btn btn-lg btn-primary btn-block" type="submit" value="Изменить" />
+                                </div>
+                            </div>
+                </div>
+                </fieldset>
+                </form>
+            </section>
+            <footer class="footer">
+                <p>&copy; Куслин Илья, гр.454, СПбГТИ(ТУ), 2019</p>
+            </footer>
+        </div>
+    </body>
+</html>

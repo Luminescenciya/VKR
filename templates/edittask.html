@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Дистанционная система проверки задач</title>
+        <link href="../static/bootstrap.css" rel="stylesheet">
+        <link href="../static/jumbotron-narrow.css" rel="stylesheet">
+        <script src="../static/js/jquery-3.3.1.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <nav>
+                    <ul class="nav nav-pills pull-right">
+                        <li role="presentation" class="active"><a href="/userHomeAdmin">Выбор задачи</a>
+                        </li>
+                        <li role="presentation"><a href="/logout">Выйти</a>
+                        </li>
+                    </ul>
+                </nav>
+                <h3 class="text-muted">Дистанционная система проверки задач</h3>
+            </div>
+            <section>
+                <div class="jumbotron">
+                    <form enctype="multipart/form-data" class="form-horizontal" method="POST" action="/updateTask">
+                        <fieldset>
+                            <!-- Form Name -->
+                            <h2>Редактирование задачи</h2>
+                            <textarea id="txtId" style="display:none;" name = "updateId">Id = </textarea>
+                            <!-- Text input-->
+                            <div class="form-group">
+                                <p class="col-md-4 control-label" style="display: table-cell;">Название:</p>
+                                <div class="col-md-8">
+                                    <textarea type="text" style="display: table-cell;" class="form-control" id="editTitle" name ="updateTitle"></textarea>
+                                </div>
+                            </div>
+                            <!-- Textarea -->
+                            <div class="form-group">
+                                <p class="col-md-4 control-label" style="display: table-cell;" >Описание:</p>
+                                <div class="col-md-8" style="display: table-cell;">
+                                    <textarea type="text" class="form-control" style="height:200px" id="editTask" name ="updateDescription"></textarea>
+                                </div>
+                            </div>
+                            <!-- File input -->
+                            <div class="form-group">
+                                <p class="col-md-4 control-label" style="display: table-cell; padding-top: 0px;">Тест-кейсы:</p>
+                                <div class="col-md-8" style="display: table-cell;">
+                                    <p><input type="file" name="file">
+                                </div>
+                            </div>
+                            <script>
+                                var user = JSON.parse('{{ user | tojson | safe}}')
+                                
+                                document.getElementById('editTitle').innerHTML = user.Title
+                                document.getElementById('editTask').innerHTML = user.Description
+                                document.getElementById('txtId').innerHTML = user.Id
+                                
+                            </script>
+                            <!-- Button -->
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <input id="btnUpdate" name="singlebutton" class="btn btn-primary" type="submit" value="Изменить" />
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </section>
+            <footer class="footer">
+                <p>&copy; Куслин Илья, гр.454, СПбГТИ(ТУ), 2019</p>
+            </footer>
+        </div>
+    </body>
+</html>

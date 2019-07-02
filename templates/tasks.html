@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Дистанционная система проверки задач</title>
+        <link href="../static/bootstrap.css" rel="stylesheet">
+        <link href="../static/jumbotron-narrow.css" rel="stylesheet">
+        <script type="text/javascript" src="../static/js/codemirror/lib/codemirror.js"></script>
+        <script src="../static/js/codemirror/addon/edit/matchbrackets.js"></script>
+        <link rel="stylesheet" href="../static/js/codemirror/addon/hint/show-hint.css">
+        <script src="../static/js/codemirror/addon/hint/show-hint.js"></script>
+        <script src="../static/js/codemirror/mode/clike/clike.js"></script>
+        <link rel="stylesheet" href="../static/js/codemirror/lib/codemirror.css">
+        <script src="../static/js/jquery-3.3.1.js"></script>
+        <script type="text/javascript" src="../static/js/jquery-3.3.1.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <nav>
+                    <ul class="nav nav-pills pull-right">
+                        <li role="presentation" class="active"><a href="/userHome">Выбор задачи</a>
+                        </li>
+                        <li role="presentation"><a href="/logout">Выйти</a>
+                        </li>
+                    </ul>
+                </nav>
+                <h3 class="text-muted">Дистанционная система проверки задач</h3>
+            </div>
+            <section>
+                <div class="jumbotron">
+                    <!-- Form Name -->
+                    <h2  id="txt" name="titlee">Задача</h2>
+                    <form class="form-horizontal" method="post" action="/tryTask">
+                        <textarea id="txtId" style="display:none;" name = "updateId">Id = </textarea>
+                        <!-- Text input-->
+                        <div class="form-group">
+                            <p type="text"  id="editTitle" ></p>
+                        </div>
+                        <script>
+                            var user = JSON.parse('{{ user | tojson | safe}}');
+                            document.getElementById('txt').innerHTML = user.Title
+                            document.getElementById('editTitle').innerHTML = user.Description
+                            document.getElementById('txtId').innerHTML = user.Id
+                        </script>
+                        <!-- Textarea -->
+                        <div class="form-group">
+                            <p for="txtPost">Решение:</p>
+                            <textarea type="text" class="codemirror" id="editTask" name="taskanswer" ></textarea>
+                            <!-- javascript -->
+                            <script>
+                                var myCodeMirror = CodeMirror.fromTextArea(document.getElementById('editTask'), {
+                                				
+                                				lineNumbers: true,               // показывать номера строк
+                                				matchBrackets: true,             // подсвечивать скобки
+                                				mode:"clike",			// стиль подсветки
+                                				indentUnit: 0                    // размер табуляции
+                                				});
+                                				myCodeMirror.setSize("100%", "100%");		
+                            </script> 
+                        </div>
+                        <script>					
+                            var user = JSON.stringify('{{ user_decision | tojson | safe}}');
+                            user = user.slice(3);
+                            user = user.slice(0, -3);
+                            var user1 = user.split(" \\n ");
+                            function updateCodeMirror(data){
+                              var cm = $('.CodeMirror')[0].CodeMirror;
+                              var doc = cm.getDoc();
+                              var cursor = doc.getCursor(); // gets the line number in the cursor position
+                              var line = doc.getLine(cursor.line); // get the line contents
+                              var pos = { // create a new object to avoid mutation of the original selection
+                                  line: cursor.line,
+                                  ch: line.length - 1 // set the character position to the end of the line
+                              }
+                              doc.replaceRange(data, pos); // adds a new line
+                            }			
+                            updateCodeMirror(user1);		
+                        </script>  
+                        <!-- Button -->
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <input id="btnUpdate" name="singlebutton" class="btn btn-primary" type="submit" onclick="trytask()" value="Проверить" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </section>
+            <footer class="footer">
+                <p>&copy; Куслин Илья, гр.454, СПбГТИ(ТУ), 2019</p>
+            </footer>
+        </div>
+    </body>
+</html>

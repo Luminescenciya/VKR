@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <style>
+            .panel-body .checkbox {
+            display: inline-block;
+            margin: 5px;
+            }
+            .list-group {
+            margin-bottom: 10px;
+            }
+        </style>
+        <title>Дистанционная система проверки задач</title>
+        <link href="https://getbootstrap.com/docs/3.4/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://getbootstrap.com/docs/3.4/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+        <link href="../static/signup.css" rel="stylesheet">
+        <script src="../static/js/jquery-3.3.1.js"></script>
+        <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.js"></script>
+        <script>
+            $(function(){
+            	
+            	GetWishes();
+            });
+            function GetWishes(){
+            	$.ajax({
+            		url : '/getTask',
+            		type : 'GET',
+            		success: function(res){
+            			var wishObj = JSON.parse(res);
+            			$('#ulist').empty();
+            			$('#ulist2').empty();
+                   var i = wishObj.length;
+                   console.log(i);
+                   while (i>0){
+                     if (wishObj[i-1].Decision=='0'){
+                     $('#listTemplate').tmpl(wishObj[i-1]).appendTo('#ulist');}
+                     else{
+                     $('#listTemplate').tmpl(wishObj[i-1]).appendTo('#ulist2');}
+                     i=i-1;
+                   }
+            		},
+            		error: function(error){
+            			console.log(error);
+            		}
+            	});
+            };
+               
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <nav>
+                    <ul class="nav nav-pills pull-right">
+                        <li role="presentation"><a href="/usersadmin">Пользователи</a></li>
+                        <li role="presentation" class="active"><a href="/logout">Выйти</a></li>
+                    </ul>
+                </nav>
+                <h3 class="text-muted" id="nameuser" >Страница пользователя</h3>
+                <script>
+                    var user = JSON.parse('{{ user | tojson | safe}}');
+                    document.getElementById('nameuser').innerHTML = user.Name+ " " +user.SecName+" гр.№ "+user.Group
+                </script>
+            </div>
+            <section>
+                <legend id="txt" name="username">Нерешенные задачи</legend>
+                <script id="listTemplate" type="text/x-jQuery-tmpl">
+                    <li class="list-group-item text-center d-inline-block">
+                             <div class="checkbox"
+                                               <label>
+                    <a id="taskchoise" data-id=${Id} href="/tasks/${Id}" ><h3>${Title}</h3></a></label>
+                    </div>
+                     </li>
+                     
+                </script>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel-body">
+                            <ul id="ulist" class="list-group">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <legend id="txt" name="username">Решенные задачи</legend>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel-body">
+                            <ul id="ulist2" class="list-group">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <footer class="footer">
+                <p>&copy; Куслин Илья, гр.454, СПбГТИ(ТУ), 2019</p>
+            </footer>
+        </div>
+    </body>
+</html>
